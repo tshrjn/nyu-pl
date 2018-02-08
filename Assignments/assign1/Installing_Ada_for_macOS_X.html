@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Style-Type" content="text/css" /> 
+    <title>Installing Ada for Mac OS X</title>
+    <link href="/library/skin/tool_base.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="/library/skin/morpheus-nyu/tool.css" type="text/css" rel="stylesheet" media="all" />
+    <script type="text/javascript" src="/library/js/headscripts.js"></script>
+<script type="text/javascript" src="/media-gallery-tool/js/kaltura-upgrade.js"></script>    <style>body { padding: 5px !important; }</style>
+  </head>
+  <body>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<title></title>
+<link href="/library/skin/tool_base.css" media="all" rel="stylesheet" type="text/css" />
+<link href="/library/skin/new-york-u/tool.css" media="all" rel="stylesheet" type="text/css" /><script type="text/javascript" language="JavaScript" src="/library/js/headscripts.js"></script>
+<style type="text/css">body { padding: 5px !important; }
+</style>
+<p><strong>Installing Ada on Mac OS X (Mountain Lion or later)</strong></p>
+
+<p>To install Ada on your Mac, perform the following steps:</p>
+
+<p>(1) In order to use GNU Ada (GNAT) on your Mac, you will need to have certain GNU utilities installed, such as &quot;make&quot; and &quot;gcc&quot;.&nbsp; If these are already on your computer, then you can skip to step (2).</p>
+
+<p>Although you get make, gcc, etc. as part of XCode, which requires a 3.5GB&nbsp; download, it is sufficient just to download the XCode command line tools (which is a much smaller download).&nbsp; To do this, in a shell (e.g. the terminal application), type:</p>
+
+<p>xcode-select --install</p>
+
+<p>A window will pop up asking if you would like to install the command line tools. Click &quot;Install&quot; and the command line tools will be installed.</p>
+
+<p>(2) Go to <a href="http://libre.adacore.com/download/configurations">http://libre.adacore.com/download/configurations</a> and, in the middle of the page, where it says &quot;Select your platform&quot;, choose &quot;x86-64 Mac OS X (64 bits)&quot; and &quot;GNAT GPL 2017&quot;.</p>
+
+<p>(3) Expand the portion labeled &quot;GNAT Ada 2017&quot; and click on the link that says &quot;gnat-gpl-2017-x86_64-darwin-bin.tar.gz&quot; to download and save the file on your computer. Then, uncompress the downloaded file.</p>
+
+<p>(4) In a shell (e.g. terminal or under emacs), navigate down into the resulting directory until you see the files README, doinstall, etc.&nbsp; Then, type,</p>
+
+<p>sudo ./doinstall</p>
+
+<p>You will be asked for the administrator password (which is likely just your password on your Mac).&nbsp; You should accept the default directory in which the files are to installed.</p>
+
+<p>(5)&nbsp; Once the installation has completed (and the files are in /usr/local/gnat), you will need to add &quot;/usr/local/gnat/bin&quot; to the front of the PATH environment variable.&nbsp; To do this, you can put one of the following lines in your shell configuration files (e.g. .bashrc, .cshrc, etc.)</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PATH=/usr/local/gnat/bin:$PATH; export PATH&nbsp; (Bourne shell)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setenv PATH /usr/local/gnat/bin:$PATH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (C shell)</p>
+
+<p>&nbsp;</p>
+
+<p><strong>Testing the compiler</strong></p>
+
+<p>In the Ada resources folder, click on &quot;Simple Ada program to test compiler&quot;.&nbsp; A zip file will be downloaded.&nbsp; When you unzip it, you will see several files with .ads and .adb extensions.&nbsp; In a shell, go to the directory containing the files. Then type,</p>
+
+<p>gnatmake&nbsp; objmain.adb</p>
+
+<p>You will see that gcc is invoked several times, along with gnatbind and gnatlink.</p>
+
+<p>To run the program, type</p>
+
+<p>./objmain</p>
+
+<p>(you won't need the &quot;./&quot; if your PATH environment variable contains &quot;.&quot;)</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Style-Type" content="text/css" /> 
+    <title>ada_assignment.html</title>
+    <link href="/library/skin/tool_base.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="/library/skin/new-york-u/tool.css" type="text/css" rel="stylesheet" media="all" />
+    <script type="text/javascript" language="JavaScript" src="/library/js/headscripts.js"></script>
+    <style>body { padding: 5px !important; }</style>
+  </head>
+  <body>
+<TITLE>Ada Programming Assignment</TITLE>
+
+<H1>Ada Programming Assignment<br><br></h1>
+<h2>Due <u>Thursday, February 22</u></h2>
+<br>
+Please compress your code files into a zip file and upload it to our NYU Classes site. 
+<br><br>
+The sections of the <a href="http://www.dwheeler.com/lovelace/master.htm">Lovelace Ada tutorial</a>
+that you will find the most relevant are:
+<ul> 
+<li> <a href="http://www.dwheeler.com/lovelace/lesson2.htm">Lesson 2 - Basic Ada Structure (Packages)</a>
+<li>  <a href="http://www.dwheeler.com/lovelace/lesson2.htm">Lesson 13 - Tasks and Protected Types</a>
+</ul>
+However, since you will need to declare types, implement procedures, etc., you should be sure to go through at least the following additional lessons in the Lovelace tutorial: 1, 2, 3, 4, 5, 6, 8, 9.
+<br><br>
+Also, be sure to review the sample Ada programs that I have provided under "Ada Resources" in the course page (also <a href="http://cs.nyu.edu/courses/spring18/CSCI-GA.2110-001/ada_programs/">here</a>).
+<br><br>
+<u><b>Assignment</b></u><br>
+You will be implementing a program for reading in, sorting, summing, and printing an array of numbers, using concurrency.
+<br><br>
+Your program should consist of three files: MainProg.adb, Sorting.ads, and Sorting.adb as follows.
+<br><br>
+<u>MainProg.adb</u><br><br>
+
+In the file MainProg.adb, write a procedure <tt>MainProg</tt> that performs the following.
+
+<ul>   
+<li>Read in 40 numbers into an array. Each number is an integer
+between 0 and 500, inclusive. You should use a subtype of integer as the element
+  type of the array to enforce this restriction.  Use Ada's <tt>Get</tt> procedure, as seen
+  in the sample Ada programs, to read the numbers in from the standard input (the terminal).
+  Do not read the numbes in from a file.
+<br><br>
+
+<li>
+Create three tasks, <tt>PrintingTask</tt>, <tt>SortingTask</tt> and 
+<tt>AddingTask</tt>, 
+that run concurrently once the numbers have been read into the array.
+These tasks perform the followng actions:
+<ul>
+
+<br>
+<li><tt> PrintingTask</tt>:
+<ul>
+<li>First print out the elements of the array.
+
+<li>Notify <tt>SortingTask</tt> that the numbers have been
+printed.
+
+<li>Wait for notification from <tt>SortingTask</tt> that it
+is finished.
+
+<li>Print out the elements of the array again.
+
+<li>Wait to receive a value from <tt>AddingTask</tt>
+
+<li>Print the value received from <tt>AddingTask</tt>
+</ul>
+
+<br>
+<li>
+<tt>AddingTask</tt>:
+<ul>
+
+<li> Wait for notification that <tt>SortingTask</tt>
+is finished.
+
+<li>Compute the sum of the elements of the sorted array.
+
+<li>Send the result to <tt>PrintingTask</tt>.
+</ul>
+
+<br>
+<li>
+<tt>SortingTask</tt>:
+<ul>
+<li>Wait for notification that <tt>PrintingTask</tt>
+has printed the elements of the array.
+
+<li>Sort the array according to the parallel 
+quicksort algorithm described below.
+
+<li>Notify both <tt>PrintingTask</tt> and <tt>AddingTask</tt> that the
+array is sorted.
+</ul>
+</ul>
+</ul>
+
+<br><br>
+<u>Sorting.ads</u> and <u>Sorting.adb</u><br><br>
+
+In a separate package called <tt>Sorting</tt>, whose specification is
+in the file Sorting.ads and whose body is in the file Sorting.adb, define
+the procedure <tt>QSort(Low,High)</tt> for sorting those elements
+of the above array between the <tt>Low</tt>'th element and the
+<tt>High</tt>'th element, inclusive.
+
+<br><br>
+
+In <tt>Sorting.ads</tt>, the <tt>Sorting</tt> package specification, you should
+declare the following:
+<ul>
+  <li> A constant <tt>SIZE</tt> that specifies the size of the array, namely 40. Elsewhere
+    in your program, <tt>SIZE</tt> should be used, not 40, so that the size of the array
+    can easily be changed without having to modify any other part of your program.
+  <li> The type of the array, which must restrict the elements to be integers between 0
+    and 500.
+  <li> The array itself. By declaring the array in the package specification, it can be
+    referenced within the tasks in MainProg as well as shared among the various calls to
+    the <tt>QSort</tt> procedure.  This allows <tt>QSort</tt> to take only 
+    <tt>Low</tt> and <tt>High</tt> as parameters, and not the array.
+  <li> The <tt>QSort</tt> procedure.
+</ul>
+
+
+The <tt>QSort</tt> procedure should be implemented in <tt>Sorting.adb</tt>. The quicksort algorithm
+can be described as follows (assuming the array is called <tt>A</tt>).
+<ul>
+<br>
+<li>If <tt>Low</tt> is greater than or equal to <tt>High</tt>, then return.
+
+<br><br>
+<li>Otherwise, apply the routine <tt>Split</tt> to <tt>A</tt> as follows:
+<ul>
+<li>Declare a variable <tt>M</tt> and set it to the median value of the <tt>A(Low)</tt>,
+<tt>A(High)</tt>, and <tt>A((Low+High)/2)</tt>. If there are only two elements of
+<tt>A</tt> then assign to <tt>M</tt> the smaller of the two values.
+<li>
+Declare two variables <tt>I</tt> and <tt>J</tt>, setting <tt>I</tt> to <tt>Low</tt>
+and <tt>J</tt> to <tt>High</tt>.
+
+<li>
+In a loop, as long as <tt>I</tt> is less than <tt>J</tt>, perform the following steps:
+<ul>  
+<li>
+While <tt>A(I)</tt> is less than or equal to <tt>M</tt>, increment <tt>I</tt>.
+<li> 
+While <tt>A(J)</tt> is greater than <tt>M</tt>, decrement <tt>J</tt>.
+<li>
+If <tt>I</tt> is less than <tt>J</tt>, exchange the values of <tt>A(I)</tt> and <tt>A(J)</tt>.
+</ul>
+Make sure that <tt>I</tt> never becomes greater than <tt>J</tt>.
+</ul> 
+
+<br>
+<li> 
+At this point, the array <tt>A</tt> (between the Low and High elements, inclusive) has been
+split into two parts. The first part of <tt>A</tt>
+contains only numbers less than or equal to <tt>M</tt> and the second part of
+<tt>A</tt> contains only numbers greater than <tt>M</tt>.  Call <tt>QSort</tt>
+recursively on each of the two parts.  The two recursive calls should
+occur <u>concurrently</u> and should share the array. 
+</ul> 
+<br>
+Notice that by concurrently calling <tt>QSort</tt> recursively,
+you will end up with many tasks executing concurrently.
+<br>
+</ul>
+
+<br><br>
+
+I recommend that you develop your program using the following steps:
+<ol>
+  <li> In the <tt>Sorting.ads</tt> file, declare <tt>SIZE</tt>, the array type, the array, and
+    the <tt>QSort</tt> procedure.
+  <li> In the <tt>Sorting.adb</tt> file, define a dummy version of <tt>Qsort</tt> that doesn't
+    do anything.
+   <li> In the <tt>MainProg.adb</tt> file, write and debug a procedure that reads
+     in values into the array. Also write and debug a procedure that prints out the values of the
+     array. The main procedure <tt>MainProg</tt> should call these two functions.
+   <li> In the <tt>Sorting.adb</tt> file, write and debug a sequential (non-concurrent) version of
+     <tt>QSort</tt>, replacing the dummy version. Call <tt>QSort</tt> from <tt>MainProg</tt>.
+     <li> Write and debug the tasks (<tt>PrintingTask</tt>, <tt>SortingTask</tt> and 
+       <tt>AddingTask</tt>) within <tt>MainProg</tt>.  <tt>SortingTask</tt>, of course, will
+       be calling the sequential version of <tt>QSort</tt> at this point.
+     <li> Modify the sequential version of <tt>QSort</tt> to make it concurrent, as specified
+       above, and debug it.
+  </ol>
+
+<b><u>Important:</u> You must write all of the code yourself, without getting any code from the
+Web, from another student, or any other source. If you get stuck, please email me at
+goldberg@cs.nyu.edu and I will help.</b>
+  </body>
+</html>
+
